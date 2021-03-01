@@ -1,11 +1,16 @@
+import json
 from django.test import TestCase
 from users.models import User
+
+from graphene_django.utils.testing import GraphQLTestCase
+
+from graphene.test import Client
+from app.schema import schema
 
 testUserEmail = "lennon@thebeatles.com"
 password = 'mypassword'
 
 class UserTests(TestCase):
-
     def setUp(self):
         User.objects.create_user(email=testUserEmail, password=password)
 
@@ -32,3 +37,4 @@ class UserTests(TestCase):
 
         self.assertTrue(superuser.is_superuser)
         self.assertTrue(superuser.is_staff)
+
