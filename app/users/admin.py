@@ -4,8 +4,8 @@ from .models import User
 
 
 class UserAdmin(BaseUserAdmin):
-    ordering = ['email']
-    list_display = ['email']
+    ordering = ['id']
+    list_display = ['id', 'email']
 
 
 # https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#substituting-a-custom-user-model

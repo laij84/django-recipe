@@ -1,6 +1,8 @@
 import json
-from django.test import TestCase
+from django.urls import reverse
+from django.test import TestCase, Client as TestClient
 from users.models import User
+from django.contrib import admin
 
 from graphene_django.utils.testing import GraphQLTestCase
 
@@ -38,3 +40,17 @@ class UserTests(TestCase):
         self.assertTrue(superuser.is_superuser)
         self.assertTrue(superuser.is_staff)
 
+class AdminSiteTests(TestCase):
+    def setUp(self):
+        self.client = TestClient()
+        self.admin_user = User.objects.create_superuser(email="admin@meow.com", password="password")
+        
+        self.client.force_login(self.admin_user)
+
+        self.user = User.objects.create_user(email="user@meow.com", password="password")
+
+    def test_users_are_listed(self):
+        url = reverse('admin:users_user_changelist')
+        res = self.client.get(url)
+
+        self.assertContains(res, self.user.email)
